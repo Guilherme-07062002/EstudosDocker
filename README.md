@@ -243,3 +243,93 @@ Conforme é visível no comando acima, por meio da flag `-v` especificamos que u
 Para mais informações consulte a [documentação](https://docs.docker.com/storage/bind-mounts/)
 
 No entanto há um problema, e se o caminho especificado do host não existir, ou algum outro problema parecido?
+
+## Volumes
+
+Um volume é gerênciado pelo próprio docker.
+
+Vamos explorar o comando `docker volume`
+
+### Criando volume
+
+```bash
+docker volume create [nome_volume]
+```
+
+### Listando volumes
+
+```bash
+docker volume ls
+```
+
+Dessa forma agora iremos executar o container desta forma:
+
+```bash
+docker run -it -v [nome_volume:/caminho_container] imagem
+```
+
+Mas aonde está de fato esse volume?
+Podemos encontrar os volumes criados em **/var/lib/docker/volumes/**
+
+## Rede e comunicação entre containers
+
+Por meio do comando:
+
+```bash
+docker inspect [id_container][nome_container]
+```
+
+São exibidas várias informações sobre o container, neste momento faremos destaque ao campo **bridge**, ele exibe informações sobre a rede do container, é possivel notar que cada container possui todo um arcabouço de informações relacionadas a isso, inclusive ele tem um pŕoprio endereço ip.
+
+Sendo assim, caso por exemplo você execute dois containers ubuntu, e dê um ping usando o ip de outro a conexão será bem sucedida e os pings serão enviados, sendo assim podemos observar que é possivel que os containers se comuniquem entre si.
+
+No entanto o ip não permite necessáriamente uma conexão estável entre os containers, visto que ele pode assumir diferentes valores, para isso utilizaremos o **nome** do container.
+
+## Colocando nomes em containers
+
+Até então ainda não aprendemos a colocar um nome próprio aos nossos containers, podemos fazer isso apartir do comando:
+
+```bash
+docker run -it --name [nome_container] [nome_imagem] [comando]
+```
+
+Sendo assim caso você queira criar um container ubuntu com o nome 'ubuntu1':
+
+```bash
+docker run -it --name ubuntu1 ubuntu bash
+```
+
+## Criando uma rede
+
+Agora exploraremos o comando `docker network`.
+
+Para criar uma rede que permita a conexão entre os containers, execute:
+
+```bash
+docker network create --driver bridge minha-bridge
+```
+
+Para criarmos um container que esteja conectado a esta rede:
+
+```bash
+docker run -it --name ubuntu1 --network minha-bridge ubuntu bash
+```
+
+E caso inspecionemos este container, veremos que ele estará conectado a rede 'minha-bridge'.
+
+Então se criamos outro container conectado a mesma rede, para realizar a comunicação entre eles será necessário apenas o nome do container:
+
+Exemplo: `ping [nome_container]`
+
+E caso deseje listar as redes disponiveis:
+
+```bash
+docker network ls
+```
+
+Além disso podemos criar containers conectando-os a duas redes que funcionam de forma peculiar:
+
+* none - Indica que o container será criado sem qualquer interface de conexão de rede.
+* host - Indica que não haverá mais mapeamento de portas no container, caso a aplicação rode na porta 3000 do container, então também será a porta 3000 do seu host.
+
+Para mais informações sobre redes: [Documentação](https://docs.docker.com/network/bridge/)
