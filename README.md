@@ -219,3 +219,13 @@ docker run -d -p 8081:3000 [nome_imagem]
 ```
 
 Então se formos no navegador e digitarmos localhost:8081, a aplicação estará funcionando, pois mapeamos a porta 8081 do nosso host para a porta 3000 do container.
+
+Podemos especificar em que porta do container a aplicação será executada inserindo a seguinte linha no dockerFile:
+
+```dockerfile
+EXPOSE 6000
+```
+
+Dessa forma com o docker ps saberemos que essa aplicação está rodando na porta 6000 do container e será mais fácil de mapea-la para o nosso host.
+
+Depois de criada você pode subir sua imagem para o Docker Hub por meio do docker push, para mais detalhes consulte a [documentação](https://docs.docker.com/engine/reference/commandline/push/)
