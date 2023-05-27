@@ -203,10 +203,11 @@ ENTRYPOINT npm start
 E por fim para "construir" a imagem por meio desse dockerFile execute:
 
 ```bash
-# [nome] - "Etiqueta/apelido" que deseja dar a imagem
-# . - Crie no contexto do diretório atual
 docker build -t [nome] .
 ```
+
+* '[nome]' - Etiqueta/apelido que deseja dar a imagem
+* '.'' - Especifica neste caso que ele deve levar em conta o contexto do diretório atual
 
 Para mais informações consulte a [documentação](https://docs.docker.com/engine/reference/builder/).
 
