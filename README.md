@@ -68,3 +68,53 @@ Quando executamos um container podemos passar como parâmetro um comando que ser
 ```bash
 docker run ubuntu [comando]
 ```
+
+## Outros comandos
+
+### Interromper execução de container
+
+(Apenas uma informação: nos exemplos abaixo quando houver um colchete ao lado do outro, quer dizer que você pode optar por digitar um ou outro, não será preciso por exemplo, no docker stop inserir o id e o nome, você pode optar pelo o id **ou** o nome do container.)
+
+```bash
+docker stop [id_container][nome_container]
+```
+
+### Executar novamente o container que foi parado
+
+```bash
+docker start [id_container][nome_container]
+```
+
+### Executar container em modo interativo
+
+Este comando é útil caso você deseje usar o terminal do container criado com a imagem do ubuntu citado mais acima.
+
+Ele vai exibir o prompt no terminal com usuário root e em relação ao funcionamento do terminal interativo podemos fazer uma analogia de que é como se você estivesse de fato utilizando o terminal de outra máquina remotamente com o sistema operacional ubuntu
+
+```bash
+docker exec -it [id_container][nome_container] bash
+```
+
+### Pausar execução do container
+
+```bash
+docker pause [id_container][nome_container]
+```
+
+### Retomar (Despausar) execução do container
+
+```bash
+docker unpause [id_container][nome_container]
+```
+
+### Remover container
+
+```bash
+docker rm [id_container][nome_container]
+```
+
+### Criar novo container ubuntu e inicializá-lo em modo de execução interativo
+
+```bash
+docker run -it ubuntu bash
+```
