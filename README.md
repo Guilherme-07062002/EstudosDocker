@@ -116,5 +116,38 @@ docker rm [id_container][nome_container]
 ### Criar novo container ubuntu e inicializá-lo em modo de execução interativo
 
 ```bash
-docker run -it ubuntu bash
+docker run -it [nome_imagem] bash
 ```
+
+### Manter container executando "detachment"
+
+```bash
+docker run -d [nome_imagem]
+```
+
+## Exibir mapeamento de portas do container em relação ao host
+
+Alguns containers podem (dependendo do caso) ser executados em uma porta específica em seu host, podemos visualizar a porta que ele "ouve" por meio do ```docker ps``` no entanto, supondo que apareça que seu container escuta a pora 8080, caso você digite localhost:8080 no navegador é provavel que nada aconteça, isso se dá porque o container escuta essa porta mas apenas dentro de seu proprio host, você vai precisar mapear essa porta para uma que esteja disponivel em sua máquina local.
+
+Para isso podemos executar o comando inserindo a flag **-P**:
+
+```bash
+docker run -d -P [nome_imagem]
+```
+
+E para exibir como as portas foram mapeadas:
+
+```bash
+docker port [id_container][nome_container]
+```
+
+Ou seja, com esse último comando será possivel visualizar as portas de uso do container e as do host pelo qual será possivel acessá-las.
+E dessa forma mapeamos uma porta interna do container para uma porta do nosso host.
+
+Caso deseje um mapeamento específico substitua a flag -P por **-p**
+
+```bash
+docker run -d -p 8080:80 [nome_imagem]
+```
+
+O que o comando acima diz é que apartir da rota 8080 do nosso host será possivel acessar a porta 80 do container
