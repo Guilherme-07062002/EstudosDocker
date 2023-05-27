@@ -151,3 +151,25 @@ docker run -d -p 8080:80 [nome_imagem]
 ```
 
 O que o comando acima diz é que apartir da rota 8080 do nosso host será possivel acessar a porta 80 do container
+
+## Imagens
+
+Podemos definir de forma simplificada como a "receita" utilizada para a criação de um container.
+
+Para listar as imagens baixadas em seu sistema digite no terminal:
+
+```bash
+docker images
+```
+
+Uma imagem é formada por um conjunto de camadas, digitando:
+
+```bash
+docker history [nome_imagem][id_imagem]
+```
+
+Será possivel visualizar as camadas que compoem aquela imagem e informações sobre cada uma.
+
+Depois de baixada, a estrutura da imagem não pode ser alterada, visto que ela é Read-Only, no entanto, quando por exemplo executamos ela no modo terminal interativo, é visivel que podemos sim escrever nela, isso se dá pois o container nada mais é do que uma camada extra acima das camadas de imagens, que permite que possamos "escrever" nele.
+
+Dessa forma podemos criar diversos containers apartir de uma imagem, e o custo de recursos computacionais será minimo, pois todos irão usar da mesma estrutura básica, alterando apenas a camada W/R (Write / Read).
