@@ -25,4 +25,46 @@ Além disso podemos baixar as imagens para a nossa máquina, então utilizando d
 docker pull hello-world
 ```
 
-E agora a imagem hello-world será baixada e vai estar disponivel em sua maquina, no entanto, caso você digite ```docker run hello-world``` o container não será inicializado e trataremos do porque disso mais abaixo.
+E agora a imagem hello-world será baixada e vai estar disponivel em sua maquina.
+
+No entanto, caso queira testar por exemplo a imagem do ubuntu caso digite ```docker run ubuntu``` nada será exibido na tela, e trataremos do porque disso mais abaixo.
+
+## Verificando containers em execução
+
+Para obter informações sobre containers que estão em execução você pode digitar:
+
+```bash
+docker ps
+```
+
+ou
+
+```bash
+docker container ls
+```
+
+No entanto, você irá notar que o ubuntu ainda assim não está sendo exibido, no entanto, caso você execute:
+
+```bash
+docker ps -a
+```
+
+Esse comando exibe informações sobre todos os container inclusive aqueles que não estão mais sendo executados no momento, logo, agora provavalmente você irá encontrar informações sobre o ubuntu desaparecido.
+
+![exibição do terminal](imgs-readme/print1.png)
+
+Na saída do comando serão exibidos várias informações como o ID do container, o nome da imagem que serviu como base para sua criação, a quanto tempo ele foi executado, seu status, entre outros dados.
+
+Então por que ao executar o run ubuntu nada aconteceu?
+
+Isso se dá porque, conforme é possivel visualizar na imagem acima, o *COMMAND* usado por padrão no momento que o container é executado é "bash", portanto, ao executar o container, ele apenas executa o bash e finaliza sua execução.
+
+Ou seja, para que um container permaneça em execução, deve have pelo menos um processo em rodando dentro dele, caso o contrário ele será finalizado.
+
+Então como resolver isso?
+
+Quando executamos um container podemos passar como parâmetro um comando que será executado dentro dele, dessa forma:
+
+```bash
+docker run ubuntu [comando]
+```
