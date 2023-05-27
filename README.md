@@ -332,4 +332,90 @@ Além disso podemos criar containers conectando-os a duas redes que funcionam de
 * none - Indica que o container será criado sem qualquer interface de conexão de rede.
 * host - Indica que não haverá mais mapeamento de portas no container, caso a aplicação rode na porta 3000 do container, então também será a porta 3000 do seu host.
 
-Para mais informações sobre redes: [Documentação](https://docs.docker.com/network/bridge/)
+Para mais informações sobre networking em containers: [Documentação](https://docs.docker.com/network/bridge/)
+
+## Conectando-se a um banco de dados
+
+Agora vamos supor que você deseje executar uma aplicação que se comunica com um banco de dados, para isso você irá precisar executar o container da aplicação e do banco na mesma rede, conforme foi discutido mais acima.
+
+Mas vale destacar que fazer todo esse processo manualmente inserindo todos os comandos via terminal é um pouco trabalhoso, tendo isso em vista surge uma alternativa interessante.
+
+### Docker Compose
+
+[Documentação](https://docs.docker.com/compose/)
+
+Permite compor uma aplicação maior que depende de múltiplos containers através de um único arquivo.
+
+Estrutura:
+
+```yaml
+# versão do arquivo docker-compose
+version: "3.9"
+# Serviços/containers que irão compor a aplicação 
+services:
+    # Darei o nome de mongodb ao serviço (pode ser o nome que quiser)
+    mongodb:
+        # Imagem que servirá como base para a construção do container
+        image:mongo:4.4.6
+        # Nome do container
+        container_name: meu_mongo
+        networks:
+            # Network que vai rodar este container
+            - compose-bridge
+
+    app:
+        image: node:latest
+        container_name: app-node
+        networks:
+            # Ele vai ser executado na mesma rede do container anterior
+            - compose-bridge
+        # Mapeamento de portas: [porta_host]:[porta_container]
+        ports:
+            - 3000:3000
+# Configurações de rede
+networks:
+    # Criando a rede compose-bridge
+    compose-bridge:
+        # Estabelecendo o driver utilizado
+        driver: bridge
+```
+
+Na pasta aonde está o arquivo, execute no terminal:
+
+```bash
+docker-compose up
+```
+
+## Adicionais
+
+`depends_on`
+
+No exemplo citado acima o serviço **app** pode depender do outro serviço no qual está o banco, caso você queira deixar isso explicito no docker compose adicione a seguinte linha ao app:
+
+```yaml
+    depends_on:
+        - mongodb
+```
+
+Dessa forma, na hora de compor a aplicação ele vai priorizar a inicialização do mongodb e só depois que o app será inicializado.
+
+`docker-compose up -d`
+
+Inicializa a execução dos container em detachment, semelhante a como era feito mais acima no arquivo, no entanto agora por meio do docker compose.
+
+`docker-compose ps`
+
+Lista containers em execução por meio do docker compose.
+
+`docker-compose down`
+
+É o oposto do `docker-compose up`, ou seja ele "derruba" a execução dos serviços.
+
+`volumes`
+
+Também é possivel realizar a definição de volumes no docker-compose, seguindo o exemplo abaixo:
+
+```yaml
+volumes:
+    - '[caminho_host]:[caminho_container]'
+```
