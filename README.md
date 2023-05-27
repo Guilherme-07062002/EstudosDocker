@@ -173,3 +173,49 @@ Será possivel visualizar as camadas que compoem aquela imagem e informações s
 Depois de baixada, a estrutura da imagem não pode ser alterada, visto que ela é Read-Only, no entanto, quando por exemplo executamos ela no modo terminal interativo, é visivel que podemos sim escrever nela, isso se dá pois o container nada mais é do que uma camada extra acima das camadas de imagens, que permite que possamos "escrever" nele.
 
 Dessa forma podemos criar diversos containers apartir de uma imagem, e o custo de recursos computacionais será minimo, pois todos irão usar da mesma estrutura básica, alterando apenas a camada W/R (Write / Read).
+
+## Criando um imagem com dockerFile
+
+![processo de criação](imgs-readme/print2.png)
+
+Vamos supor que você possua uma aplicação que rode por meio de um servidor criado em node, caso você não possua o node instalado no seu host, você pode executar por meio de um container.
+
+Para isso será necessário criar uma imagem com um arquivo dockerFile, por meio dele podemos definir como será a criação da imagem.
+
+```dockerfile
+# Apartir da imagem do node na versão 14
+FROM node:14
+
+# Defina o diretório dentro de container aonde os comandos serão executados
+WORKDIR /app
+
+# Copie tudo do diretório atual do host para a pasta atual (/app) dentro do container
+COPY . .
+
+# Execute este comando dentro do diretório do container
+# Nesse caso ele irá instalar as depêndencias da aplicação
+RUN npm install
+
+# E por fim o comando que será executado sempre que esse container for inicializado
+ENTRYPOINT npm start
+```
+
+E por fim para "construir" a imagem por meio desse dockerFile execute:
+
+```bash
+# [nome] - "Etiqueta/apelido" que deseja dar a imagem
+# . - Crie no contexto do diretório atual
+docker build -t [nome] .
+```
+
+Para mais informações consulte a [documentação](https://docs.docker.com/engine/reference/builder/).
+
+Agora para executarmos o container criado apartir da nossa imagem, podemos mapear as portas com o nosso host.
+
+Considerando que nossa aplicação rode na porta 3000...
+
+```bash
+docker run -d -p 8081:3000 [nome_imagem]
+```
+
+Então se formos no navegador e digitarmos localhost:8081, a aplicação estará funcionando, pois mapeamos a porta 8081 do nosso host para a porta 3000 do container.
