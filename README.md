@@ -129,7 +129,7 @@ docker run -d [nome_imagem]
 
 Alguns containers podem (dependendo do caso) ser executados em uma porta específica em seu host, podemos visualizar a porta que ele "ouve" por meio do ```docker ps``` no entanto, supondo que apareça que seu container escuta a pora 8080, caso você digite localhost:8080 no navegador é provavel que nada aconteça, isso se dá porque o container escuta essa porta mas apenas dentro de seu proprio host, você vai precisar mapear essa porta para uma que esteja disponivel em sua máquina local.
 
-Para isso podemos executar o comando inserindo a flag **-P**:
+Para isso podemos executar o comando inserindo a flag `-P`:
 
 ```bash
 docker run -d -P [nome_imagem]
@@ -144,7 +144,7 @@ docker port [id_container][nome_container]
 Ou seja, com esse último comando será possivel visualizar as portas de uso do container e as do host pelo qual será possivel acessá-las.
 E dessa forma mapeamos uma porta interna do container para uma porta do nosso host.
 
-Caso deseje um mapeamento específico substitua a flag -P por **-p**
+Caso deseje um mapeamento específico substitua a flag `-P` por `-p`
 
 ```bash
 docker run -d -p 8080:80 [nome_imagem]
@@ -229,3 +229,17 @@ EXPOSE 6000
 Dessa forma com o docker ps saberemos que essa aplicação está rodando na porta 6000 do container e será mais fácil de mapea-la para o nosso host.
 
 Depois de criada você pode subir sua imagem para o Docker Hub por meio do docker push, para mais detalhes consulte a [documentação](https://docs.docker.com/engine/reference/commandline/push/)
+
+## Persistir dados no container
+
+Vimos que ao excluir um container os dados dentro dele também são apagados, podemos resolver esse problema por meio do seguinte comando com a flag `-v`:
+
+```bash
+docker run -it -v [/caminho_host:/caminho_container] imagem
+```
+
+Conforme é visível no comando acima, por meio da flag `-v` especificamos que um determinado diretório no host, reflete em um diretório dentro do container, dessa forma caso por exemplo digamos que uma pasta /host espelhe /app dentro do container, tudo que for salvo em /app ficará persistido na pasta /host da máquina local.
+
+Para mais informações consulte a [documentação](https://docs.docker.com/storage/bind-mounts/)
+
+No entanto há um problema, e se o caminho especificado do host não existir, ou algum outro problema parecido?
