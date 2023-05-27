@@ -125,7 +125,7 @@ docker run -it [nome_imagem] bash
 docker run -d [nome_imagem]
 ```
 
-## Exibir mapeamento de portas do container em relação ao host
+## Mapeamento de portas
 
 Alguns containers podem (dependendo do caso) ser executados em uma porta específica em seu host, podemos visualizar a porta que ele "ouve" por meio do ```docker ps``` no entanto, supondo que apareça que seu container escuta a pora 8080, caso você digite localhost:8080 no navegador é provavel que nada aconteça, isso se dá porque o container escuta essa porta mas apenas dentro de seu proprio host, você vai precisar mapear essa porta para uma que esteja disponivel em sua máquina local.
 
